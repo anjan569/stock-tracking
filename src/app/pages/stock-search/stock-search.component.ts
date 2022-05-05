@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { StocksService } from 'src/app/services/stocks.service';
-import { StockQuote } from './../../../models/stock.model';
+import { StockLookup, StockQuote } from 'src/models/stock.model';
 
 @Component({
   selector: 'app-stock-search',
@@ -11,8 +11,8 @@ import { StockQuote } from './../../../models/stock.model';
 })
 export class StockSearchComponent implements OnInit {
   stockSymbol: FormControl;
-  stockQuoteData: Object;
-  stockSymbolDetails: Object;
+  stockQuoteData: StockQuote[] = [];
+  stockSymbolDetails: StockLookup;
   constructor(private fb: FormBuilder, private stockService: StocksService) { }
 
   ngOnInit(): void {
@@ -24,7 +24,7 @@ export class StockSearchComponent implements OnInit {
 
   searchQuote() {
     localStorage.clear();
-    this.stockQuoteData = null;
+    this.stockQuoteData = [];
     this.stockSymbolDetails = null;
     const qSymbol = this.stockSymbol.value.toUpperCase();
     
@@ -32,7 +32,12 @@ export class StockSearchComponent implements OnInit {
     const searchUrl = this.stockService.getSearch$(qSymbol);
     forkJoin([quoteUrl,searchUrl]).subscribe(response => {
       if(response) {
-        this.stockQuoteData = response[0];
+        if(Array.isArray(response[0])) {
+          this.stockQuoteData =response[0];
+        } else {
+          this.stockQuoteData.push(response[0] as StockQuote);
+        }
+        
         this.stockSymbolDetails =  response[1]['result'].filter(element => {
             return element.symbol === qSymbol
         });

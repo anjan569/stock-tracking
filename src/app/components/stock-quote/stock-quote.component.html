@@ -2,15 +2,7 @@
     <mat-card *ngIf="stockQuoteData">
         <mat-card-title>
             <div fxLayout="row" class="header">
-                <span>{{ stockSymbol.description }} ({{ stockSymbol.displaySymbol }})
-
-                    <span *ngIf="!stockChanged">
-                        <mat-icon class="ember"> arrow_downward </mat-icon>
-                    </span>
-                    <span *ngIf="stockChanged">
-                        <mat-icon class="success"> arrow_upward </mat-icon>
-                    </span>
-                </span>
+                <span>{{ stockSymbol.description }} ({{ stockSymbol.displaySymbol }}) </span>
                 <mat-icon (click)="onRemove()" class="closeBtn">close</mat-icon>
             </div>
         </mat-card-title>
@@ -24,7 +16,14 @@
                     <div>Opening price: {{stockQuoteData.o | currency: 'USD':'symbol':'3.2-2'}} </div>
                     <div>High price: {{stockQuoteData.h | currency: 'USD':'symbol':'3.2-2'}} </div>
                 </div>
-
+                <div>
+                    <span *ngIf="!stockChanged">
+                        <mat-icon class="ember"> arrow_downward </mat-icon>
+                    </span>
+                    <span *ngIf="stockChanged">
+                        <mat-icon class="success"> arrow_upward </mat-icon>
+                    </span>
+                </div>
             </div>
         </mat-card-content>
         <mat-card-actions>

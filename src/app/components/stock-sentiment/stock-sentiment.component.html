@@ -11,7 +11,7 @@
                 <div> Change: {{ stockDetails.change > 0 ? '+' + stockDetails.change : stockDetails.change}} </div>
                 <div>MSPR: {{stockDetails.mspr }} </div>
             </div>
-            <div layout="column" fxFlex="20%">
+            <div fxFlex="20%">
                 <span *ngIf="!stockChanged"><mat-icon class="ember"> arrow_downward </mat-icon> </span>
                <span *ngIf="stockChanged"> <mat-icon class="success"> arrow_upward </mat-icon> </span>
             </div>
