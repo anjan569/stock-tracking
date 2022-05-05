@@ -1,0 +1,20 @@
+<mat-card>
+    <mat-card-title>
+        <div fxLayout="row">
+            <span>{{ stockSymbol.description }} ({{ stockSymbol.displaySymbol }}) </span>
+        </div>
+    </mat-card-title>
+    <mat-card-content>
+        <div fxLayout="row" fxLayoutGap="10" *ngIf="stockInsideSentiment.length">
+            <ng-container *ngFor="let sentiment of stockInsideSentiment">
+                <app-stock-details [stockDetails]="sentiment"></app-stock-details>
+            </ng-container>
+        </div>
+        <div *ngIf="!stockInsideSentiment.length">
+            Date not avaliable!
+        </div>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-button (click)="goToQuote()">Back to list of stocks</button>
+    </mat-card-actions>
+</mat-card>

@@ -1,0 +1,21 @@
+.container {
+    width: 95%;
+    margin:0px  15px;
+}
+.success {
+    color: green;
+}
+
+.ember {
+    color: red;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.closeBtn {
+    cursor: pointer;
+}
