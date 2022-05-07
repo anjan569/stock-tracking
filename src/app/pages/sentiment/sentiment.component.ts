@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StocksService } from 'src/app/services/stocks.service';
-import { StockDetails, StockLookup, StockSentiment } from 'src/models/stock.model';
+import { StockDetails, StockLookup, Stocks, StockSentiment } from 'src/models/stock.model';
 
 @Component({
   selector: 'app-sentiment',
@@ -11,15 +11,20 @@ import { StockDetails, StockLookup, StockSentiment } from 'src/models/stock.mode
 export class SentimentComponent implements OnInit {
   stockSymbol: StockLookup;
   stockInsideSentiment: StockDetails[];
+  stockQuoteData: Stocks[] = [];
   constructor(private router: Router, private stockService: StocksService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     let params: any = this.activatedRoute.snapshot.params;
 
-    if (localStorage.getItem('stocksymbol') !== null) {
-      this.stockSymbol = JSON.parse(localStorage.getItem('stocksymbol'));
-      console.log(this.stockSymbol);
-
+    if (localStorage.getItem('stocks') !== null) {
+      const stockQuoteData = JSON.parse(localStorage.getItem("stocks"));
+      stockQuoteData.forEach(element => {
+        const qLookup = element.symbol;
+        if (params.id === qLookup.symbol) {
+          this.stockSymbol = qLookup;
+        }
+      });
     }
     if (localStorage.getItem('InsiderSentiment') !== null) {
       this.stockInsideSentiment = JSON.parse(localStorage.getItem('InsiderSentiment'));

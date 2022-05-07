@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { StockDetails, StockLookup } from 'src/models/stock.model';
+import { StockDetails, StockLookup, Stocks } from 'src/models/stock.model';
 
 @Component({
   selector: 'app-stock-details',
@@ -10,14 +10,15 @@ export class StockSentimentComponent implements OnInit {
   @Input() stockDetails: StockDetails;
   stockSymbol: StockLookup;
   stockChanged: boolean;
+  stockQuoteData: Stocks[] =[];
   constructor() { }
 
   ngOnInit(): void {
     console.log(this.stockDetails);
-    if(localStorage.getItem('stocks') !== null) {
-      const stocks = JSON.parse(localStorage.getItem('stocks'));
-      this.stockSymbol = stocks.symbol;
-    }
+    // if (localStorage.getItem('stocks') !== null) {
+    //   const stockQuoteData = JSON.parse(localStorage.getItem("stocks"));
+    //   this.stockSymbol = stockQuoteData.symbol;
+    // }
     if(this.stockDetails) {
        this.stockChanged = this.stockDetails.change > 0;
     }

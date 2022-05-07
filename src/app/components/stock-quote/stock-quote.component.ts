@@ -30,9 +30,11 @@ export class StockQuoteComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (localStorage.getItem("stocksymbol") !== null) {
-      this.stockSymbol = JSON.parse(localStorage.getItem('stocksymbol'));   
-      console.log(this.stockSymbol);
+    if (localStorage.getItem("stocks") !== null) {
+      if (localStorage.getItem('stocks') !== null) {
+        const stockQuoteData = JSON.parse(localStorage.getItem("stocks"));
+        this.stockSymbol = stockQuoteData.symbol;
+      }
       
     }
   }

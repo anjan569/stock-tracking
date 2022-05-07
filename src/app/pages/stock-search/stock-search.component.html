@@ -7,7 +7,7 @@
                 <mat-form-field appearance="outline">
                     <input matInput placeholder="Enter the symbol.." [formControl]="stockSymbol" autocomplete="false" required  minlength="3">
                 </mat-form-field>
-                <mat-error *ngIf="stockSymbol.invalid">
+                <mat-error *ngIf="stockSymbol.invalid && stockSymbol.touched">
                     Invalid stock symbol
                 </mat-error>
                 </div> 
@@ -16,7 +16,6 @@
                 </div>
             </div>
             <br />
-            {{stockQuoteData}}
             <div layout="column">
                 <div *ngFor="let sQuote of stockQuoteData; index as i">
                 <app-stock-quote [stocks]="sQuote" (onRemoveEvent)="onRemoveQuote($event)" [currentIndex]="i">
