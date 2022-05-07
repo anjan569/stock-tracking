@@ -5,7 +5,7 @@
             <div fxLayout="row">
                 <div fxFlex="25">
                 <mat-form-field appearance="outline">
-                    <input matInput placeholder="Enter the symbol.." [formControl]="stockSymbol" autocomplete="false" required maxlength="5" minlength="3">
+                    <input matInput placeholder="Enter the symbol.." [formControl]="stockSymbol" autocomplete="false" required  minlength="3">
                 </mat-form-field>
                 <mat-error *ngIf="stockSymbol.invalid">
                     Invalid stock symbol
