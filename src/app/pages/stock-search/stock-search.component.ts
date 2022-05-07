@@ -62,15 +62,17 @@ export class StockSearchComponent implements OnInit {
   }
 
   onRemoveQuote(value) {
-    console.log(value);
-    let fieldValue;
-    if (localStorage.getItem('stocksymbol') !== null) {
-      fieldValue = localStorage.getItem('stocksymbol').split(',');
-    }
-    fieldValue.splice(value);
-    this.stockQuoteData.splice(value);
-    this.stockSymbol.setValue(fieldValue.replace(/^"(.*)"$/, '$1').join(', '));
+    let fieldValue = [];
 
+
+    this.stockQuoteData.splice(value);
+
+    this.stockQuoteData.forEach(value => {
+      fieldValue.push(value.symbol.symbol);
+    });
+
+    this.stockSymbol.setValue(fieldValue.join(','));
+    localStorage.setItem('stocksymbol', JSON.stringify(this.stockSymbol.value.toUpperCase()));
     localStorage.setItem('stocks', JSON.stringify(this.stockQuoteData));
   }
 

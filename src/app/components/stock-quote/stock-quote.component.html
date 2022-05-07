@@ -2,7 +2,7 @@
     <mat-card *ngIf="stockQuoteData">
         <mat-card-title>
             <div fxLayout="row" class="header">
-                <span>{{ stockSymbol.description }} ({{ stockSymbol.displaySymbol }}) </span>
+                <span> {{currentIndex}} {{ stockSymbol.description }} ({{ stockSymbol.displaySymbol }}) </span>
                 <mat-icon (click)="onRemove()" class="closeBtn">close</mat-icon>
             </div>
         </mat-card-title>
