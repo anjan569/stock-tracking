@@ -14,8 +14,9 @@ export class StockSentimentComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.stockDetails);
-    if(localStorage.getItem('stocksymbol') !== null) {
-      this.stockSymbol = JSON.parse(localStorage.getItem('stocksymbol'));
+    if(localStorage.getItem('stocks') !== null) {
+      const stocks = JSON.parse(localStorage.getItem('stocks'));
+      this.stockSymbol = stocks.symbol;
     }
     if(this.stockDetails) {
        this.stockChanged = this.stockDetails.change > 0;

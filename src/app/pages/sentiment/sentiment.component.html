@@ -1,5 +1,5 @@
 <mat-card>
-    <mat-card-title>
+    <mat-card-title *ngIf="stockInsideSentiment.length">
         <div fxLayout="row">
             <span>{{ stockSymbol.description }} ({{ stockSymbol.displaySymbol }}) </span>
         </div>

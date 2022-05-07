@@ -8,11 +8,11 @@
         </mat-card-title>
         <mat-card-content>
             <div fxLayout="row">
-                <div fxLayout="column" fxFlex="25%">
+                <div fxLayout="column" fxFlex="20%">
                     <div>Change today: {{stockQuoteData.d > 0 ? '+' + stockQuoteData.d : '-'+stockQuoteData.d}} </div>
                     <div>Current price: {{stockQuoteData.c | currency: 'USD':'symbol':'3.2-2'}} </div>
                 </div>
-                <div fxLayout="column" fxFlex="25%">
+                <div fxLayout="column" fxFlex="20%">
                     <div>Opening price: {{stockQuoteData.o | currency: 'USD':'symbol':'3.2-2'}} </div>
                     <div>High price: {{stockQuoteData.h | currency: 'USD':'symbol':'3.2-2'}} </div>
                 </div>

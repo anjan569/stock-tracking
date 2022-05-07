@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { StocksService } from './../../services/stocks.service';
-import { StockLookup, StockQuote } from './../../../models/stock.model';
+import { StockLookup, StockQuote, Stocks } from './../../../models/stock.model';
 import { Router } from '@angular/router';
 
 
@@ -10,13 +10,20 @@ import { Router } from '@angular/router';
   styleUrls: ['./stock-quote.component.scss']
 })
 export class StockQuoteComponent implements OnChanges, OnInit {
-  @Input() stockQuoteData: StockQuote;
-  @Output() onRemoveEvent = new EventEmitter();
+  stockQuoteData: StockQuote;
+  @Input() stocks: Stocks;
+  @Input() currentIndex: number;
+  @Output() onRemoveEvent = new EventEmitter<number>();
   stockSymbol: StockLookup;
   stockChanged: boolean;
   constructor(private stockServie: StocksService, private router: Router) { }
 
   ngOnInit(): void {
+    console.log(this.stocks);
+    if(this.stocks) {
+      this.stockQuoteData = this.stocks.stockQuote;
+      this.stockSymbol = this.stocks.symbol;
+    }
     if(this.stockQuoteData) {
       this.stockChanged = this.stockQuoteData.d > 0;
     }
@@ -30,7 +37,7 @@ export class StockQuoteComponent implements OnChanges, OnInit {
     }
   }
   onRemove() {
-    this.onRemoveEvent.emit();
+    this.onRemoveEvent.emit(this.currentIndex);
   }
 
   gotoSentiment() {

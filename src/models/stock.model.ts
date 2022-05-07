@@ -1,3 +1,9 @@
+
+export interface Stocks {
+   symbol: StockLookup;
+   stockQuote: StockQuote
+}
+
 export interface StockQuote {
     c: number;
     h: number;
