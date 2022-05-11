@@ -17,35 +17,39 @@ export class StockSearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.stockSymbolFC = this.fb.control(null);
-    if(this.stockService.getStocks()) {
+    if (this.stockService.getStocks()) {
       this.stockQuoteData = this.stockService.getStocks();
     }
-    
+
     if (this.stockService.getSymbols() !== null) {
       const storedSymbols = this.stockService.getSymbols();
-      this.stockSymbolFC.setValue(storedSymbols.join(', '));
-      // this.searchQuote();
+      // this.stockSymbolFC.setValue(storedSymbols.join(', '));
     }
   }
 
   isExistingSymbolInStore(newSymbols) {
     const symbols = this.stockService.getSymbols();
 
-    return newSymbols.filter(ns => !symbols.includes(ns.toUpperCase().trim()));
+    return symbols.includes(newSymbols);
 
 
   }
 
   searchQuote() {
-    const qSymbol = this.stockSymbolFC.value.split(',');
-    const querySymbols = this.isExistingSymbolInStore(qSymbol);
-    if (querySymbols && querySymbols.length > 0) {
-      querySymbols.forEach(element => {
-        const qSybl =element.toUpperCase().trim();
-        this.stockService.addSymbols(qSybl);
-        this.getStock(qSybl);
-      });
+    const qSymbol = this.stockSymbolFC.value.toUpperCase().trim();
+    if(!this.isExistingSymbolInStore(qSymbol)) {
+      const qSybl = qSymbol.toUpperCase().trim();
+      this.stockService.addSymbols(qSybl);
+      this.getStock(qSybl);
     }
+    // const querySymbols = this.isExistingSymbolInStore(qSymbol);
+    // if (querySymbols && querySymbols.length > 0) {
+    //   querySymbols.forEach(element => {
+    //     const qSybl =element.toUpperCase().trim();
+    //     this.stockService.addSymbols(qSybl);
+    //     this.getStock(qSybl);
+    //   });
+    // }
   }
 
   getStock(symbol) {
@@ -66,6 +70,7 @@ export class StockSearchComponent implements OnInit {
       })
     ).subscribe((result: Stocks) => {
       this.stockQuoteData.push(result);
+      this.stockSymbolFC.setValue(null);
       localStorage.setItem('stocks', JSON.stringify(this.stockQuoteData));
     });
   }
@@ -74,21 +79,9 @@ export class StockSearchComponent implements OnInit {
     let fieldValue = [];
 
     const stockIndex = this.stockQuoteData.indexOf(currentStock);
-    // if(stockIndex == 0) {
-    //   this.stockQuoteData.shift()
-    // } else {
-      this.stockQuoteData.splice(stockIndex, 1)
-    // }ss
-  //  const filteredStocks = this.stockQuoteData.filter((item,i) => {
-  //     return stockIndex != i;
-  //  })
-  //   this.stockQuoteData = filteredStocks;
-    this.stockService.removeSymbols();
-    this.stockQuoteData.forEach(sq => {
-      this.stockService.addSymbols(sq.symbol.symbol);
-    })
-    
-    this.stockSymbolFC.setValue(this.stockService.getSymbols().join(', '));
+
+    this.stockQuoteData.splice(stockIndex, 1)
+
     localStorage.setItem('stocks', JSON.stringify(this.stockQuoteData));
   }
 

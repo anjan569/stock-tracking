@@ -7,15 +7,14 @@
                     <div fxFlex="25">
                         <mat-form-field appearance="outline">
                             <input matInput placeholder="Enter the symbol.." [formControl]="stockSymbolFC"
-                                autocomplete="false" required minlength="3">
+                                autocomplete="false" minlength="1" required>
                         </mat-form-field>
-                        <mat-error *ngIf="stockSymbolFC.invalid && stockSymbolFC.touched">
+                        <!-- <mat-error *ngIf="stockSymbolFC.invalid && stockSymbolFC.touched">
                             Invalid stock symbol
-                        </mat-error>
+                        </mat-error> -->
                     </div>
                     <div fxFlex="25">
-                        <button [disabled]="stockSymbolFC.invalid && stockSymbolFC.touched" mat-raised-button
-                            color="primary" (click)="searchQuote()">Track Stock</button>
+                        <button mat-raised-button [disabled]="stockSymbolFC.invalid" color="primary" (click)="searchQuote()">Track Stock</button>
                     </div>
                 </div>
             </div>
