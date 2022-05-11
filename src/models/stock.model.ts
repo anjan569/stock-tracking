@@ -1,7 +1,7 @@
 
 export interface Stocks {
    symbol: StockLookup;
-   stockQuote: StockQuote
+   stockQuote: StockQuote;
 }
 
 export interface StockQuote {

@@ -66,7 +66,7 @@ export class SentimentComponent implements OnInit {
 
 
   goToQuote() {
-    this.router.navigate([/'Home'/]);
+    this.router.navigate(['/']);
   }
 
 }

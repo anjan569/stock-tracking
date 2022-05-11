@@ -11,68 +11,84 @@ import { StockLookup, StockQuote, Stocks } from 'src/models/stock.model';
   styleUrls: ['./stock-search.component.scss']
 })
 export class StockSearchComponent implements OnInit {
-  stockSymbol: FormControl;
+  stockSymbolFC: FormControl;
   stockQuoteData: Stocks[] = [];
-  stockNamelDetails: StockLookup[] = [];
   constructor(private fb: FormBuilder, private stockService: StocksService) { }
 
   ngOnInit(): void {
-    this.stockSymbol = this.fb.control(null);
-    if (localStorage.getItem("stocks") !== null) {
-      const stocks = JSON.parse(localStorage.getItem("stocks"));
-      this.stockQuoteData = stocks;
+    this.stockSymbolFC = this.fb.control(null);
+    if(this.stockService.getStocks()) {
+      this.stockQuoteData = this.stockService.getStocks();
     }
+    
+    if (this.stockService.getSymbols() !== null) {
+      const storedSymbols = this.stockService.getSymbols();
+      this.stockSymbolFC.setValue(storedSymbols.join(', '));
+      // this.searchQuote();
+    }
+  }
 
-    if (localStorage.getItem('stocksymbol') !== null) {
-      this.stockSymbol.setValue(localStorage.getItem('stocksymbol').replace(/^"(.*)"$/, '$1'));
-    }
+  isExistingSymbolInStore(newSymbols) {
+    const symbols = this.stockService.getSymbols();
+
+    return newSymbols.filter(ns => !symbols.includes(ns.toUpperCase().trim()));
+
+
   }
 
   searchQuote() {
-    localStorage.clear();
-    this.stockQuoteData = [];
-    this.stockNamelDetails = [];
-    const qSymbol = this.stockSymbol.value.split(',');
-    localStorage.setItem('stocksymbol', JSON.stringify(this.stockSymbol.value.toUpperCase()));
-    if (qSymbol) {
-      qSymbol.forEach(searchKeySymbol => {
-        const symbol = searchKeySymbol.toUpperCase().trim();
-        this.stockService.getSearch$(symbol).pipe(
-          map(stocks => {
-            const stockName = stocks['result'].filter(element => {
-              return element.symbol === symbol;
-            });
-
-            return stockName;
-          }),
-          mergeMap(stockName => {
-            return this.stockService.getQuote$(stockName[0].symbol).pipe(
-              map(quoteInfo => {
-                return { symbol: stockName[0], stockQuote: quoteInfo }
-              })
-            );
-          })
-        ).subscribe((result: Stocks) => {
-          this.stockQuoteData.push(result)
-          localStorage.setItem('stocks', JSON.stringify(this.stockQuoteData));
-        });
+    const qSymbol = this.stockSymbolFC.value.split(',');
+    const querySymbols = this.isExistingSymbolInStore(qSymbol);
+    if (querySymbols && querySymbols.length > 0) {
+      querySymbols.forEach(element => {
+        const qSybl =element.toUpperCase().trim();
+        this.stockService.addSymbols(qSybl);
+        this.getStock(qSybl);
       });
-
     }
   }
 
-  onRemoveQuote(value) {
+  getStock(symbol) {
+    this.stockService.getSearch$(symbol).pipe(
+      map(stocks => {
+        const stockName = stocks['result'].filter(element => {
+          return element.symbol === symbol;
+        });
+
+        return stockName;
+      }),
+      mergeMap(stockName => {
+        return this.stockService.getQuote$(stockName[0]?.symbol).pipe(
+          map(quoteInfo => {
+            return { symbol: stockName[0], stockQuote: quoteInfo }
+          })
+        );
+      })
+    ).subscribe((result: Stocks) => {
+      this.stockQuoteData.push(result);
+      localStorage.setItem('stocks', JSON.stringify(this.stockQuoteData));
+    });
+  }
+
+  onRemoveQuote(currentStock) {
     let fieldValue = [];
 
-
-    this.stockQuoteData.splice(value);
-
-    this.stockQuoteData.forEach(value => {
-      fieldValue.push(value.symbol.symbol);
-    });
-
-    this.stockSymbol.setValue(fieldValue.join(','));
-    localStorage.setItem('stocksymbol', JSON.stringify(this.stockSymbol.value.toUpperCase()));
+    const stockIndex = this.stockQuoteData.indexOf(currentStock);
+    // if(stockIndex == 0) {
+    //   this.stockQuoteData.shift()
+    // } else {
+      this.stockQuoteData.splice(stockIndex, 1)
+    // }ss
+  //  const filteredStocks = this.stockQuoteData.filter((item,i) => {
+  //     return stockIndex != i;
+  //  })
+  //   this.stockQuoteData = filteredStocks;
+    this.stockService.removeSymbols();
+    this.stockQuoteData.forEach(sq => {
+      this.stockService.addSymbols(sq.symbol.symbol);
+    })
+    
+    this.stockSymbolFC.setValue(this.stockService.getSymbols().join(', '));
     localStorage.setItem('stocks', JSON.stringify(this.stockQuoteData));
   }
 

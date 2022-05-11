@@ -13,7 +13,7 @@ export class StockQuoteComponent implements OnChanges, OnInit {
   stockQuoteData: StockQuote;
   @Input() stocks: Stocks;
   @Input() currentIndex: number;
-  @Output() onRemoveEvent = new EventEmitter<number>();
+  @Output() onRemoveEvent = new EventEmitter<Stocks>();
   stockSymbol: StockLookup;
   stockChanged: boolean;
   constructor(private stockServie: StocksService, private router: Router) { }
@@ -24,22 +24,27 @@ export class StockQuoteComponent implements OnChanges, OnInit {
       this.stockQuoteData = this.stocks.stockQuote;
       this.stockSymbol = this.stocks.symbol;
     }
-    if(this.stockQuoteData) {
-      this.stockChanged = this.stockQuoteData.d > 0;
-    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (localStorage.getItem("stocks") !== null) {
-      if (localStorage.getItem('stocks') !== null) {
-        const stockQuoteData = JSON.parse(localStorage.getItem("stocks"));
-        this.stockSymbol = stockQuoteData.symbol;
-      }
-      
+    console.log(this.stocks);
+    if(this.stocks) {
+      this.stockQuoteData = this.stocks.stockQuote;
+      this.stockSymbol = this.stocks.symbol;
     }
+    if(this.stockQuoteData) {
+      this.stockChanged = this.stockQuoteData.d > 0;
+    }
+    // if (localStorage.getItem("stocks") !== null) {
+    //   if (localStorage.getItem('stocks') !== null) {
+    //     const stockQuoteData = this.stockServie.getStocks();
+    //     this.stockSymbol = stockQuoteData.symbol;
+    //   }
+      
+    // }
   }
   onRemove() {
-    this.onRemoveEvent.emit(this.currentIndex);
+    this.onRemoveEvent.emit(this.stocks);
   }
 
   gotoSentiment() {

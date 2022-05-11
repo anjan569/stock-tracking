@@ -1,5 +1,5 @@
 <div class="container">
-    <mat-card *ngIf="stockQuoteData">
+    <mat-card *ngIf="stockQuoteData && stockSymbol">
         <mat-card-title>
             <div fxLayout="row" class="header">
                 <span> {{ stockSymbol.description }} ({{ stockSymbol.displaySymbol }}) </span>
