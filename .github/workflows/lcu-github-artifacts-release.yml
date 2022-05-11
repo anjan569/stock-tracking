@@ -14,7 +14,7 @@ env:
   MainBranch: master
   NPMRegistry: https://registry.npmjs.org/
   InstallCommand: npm i
-  BuildCommand: npm run build
+  BuildCommand: npm run build --prod
   Output: ./dist/stockTrackingapp
 
 jobs:
